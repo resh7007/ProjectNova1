@@ -74,6 +74,8 @@ public class CardManager : MonoBehaviour
     /// </summary>
     private void GenerateCards()
     {
+        flippedCards.Clear();
+
         List<int> cardIDs = new List<int>();
         totalMatches = (columns * rows) / 2;
         allCards.Clear();
@@ -129,9 +131,9 @@ public class CardManager : MonoBehaviour
     /// </summary>
     public void CardFlipped(Card card)
     {
+        StopAllCoroutines();
         if (flippedCards.Contains(card))
-        {
-            Debug.Log("card is in flippedCards="+card.name);
+        { 
             return; // Ignore if already flipped
         }
     
@@ -157,7 +159,7 @@ public class CardManager : MonoBehaviour
     /// </summary>
     private IEnumerator CheckMatch()
     {
-         yield return new WaitForSeconds(0.9f);
+          yield return new WaitForSeconds(0.6f);
 
         if (flippedCards.Count < 2) yield break;
 
@@ -186,7 +188,7 @@ public class CardManager : MonoBehaviour
         }
         else  
         {
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.6f);  
 
             if (flippedCards.Count == 2)  
             {

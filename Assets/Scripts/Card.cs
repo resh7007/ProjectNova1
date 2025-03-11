@@ -61,8 +61,7 @@ public class Card : MonoBehaviour
     public void ResetCard()
     {
         if (this == null || cardImage == null)
-        {
-            Debug.LogWarning("ResetCard() skipped because the card was destroyed.");
+        { 
             return;
         }
 
