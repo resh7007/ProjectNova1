@@ -7,15 +7,16 @@ public class Card : MonoBehaviour
  
     public int CardID { get; private set; }  // Unique ID for matching pairs
     private Image cardImage;
-    private bool isFlipped = false;
-    private bool isMatched = false;
+   [SerializeField] private bool isFlipped = false;
+   [SerializeField]  private bool isMatched = false;
 
     private Sprite frontSprite;
     private Sprite backSprite;
-
+    private  Vector3 startCardScale;
     private void Awake()
     {
         cardImage = GetComponent<Image>();
+        startCardScale = transform.localScale;
     }
 
     /// <summary>
@@ -37,7 +38,7 @@ public class Card : MonoBehaviour
         if (isFlipped || isMatched) return;
 
         StartCoroutine(FlipCard());
-        CardManager.Instance.CardFlipped(this);
+        CardManager.Instance.CardFlipped(this); 
     }
 
     /// <summary>
@@ -59,9 +60,23 @@ public class Card : MonoBehaviour
     /// </summary>
     public void ResetCard()
     {
+        if (this == null || cardImage == null)
+        {
+            Debug.LogWarning("ResetCard() skipped because the card was destroyed.");
+            return;
+        }
+
+        FlipBack();
         isFlipped = false;
         isMatched = false;
-        cardImage.sprite = backSprite;  // Show back side
+        cardImage.sprite = backSprite;  //  Flip the card back
+    }
+
+    void FlipBack()
+    {
+        StopAllCoroutines();
+        transform.localScale = startCardScale;
+
     }
 
     /// <summary>
@@ -103,5 +118,10 @@ public class Card : MonoBehaviour
         }
 
         transform.localScale = endScale; // Ensure it returns to normal size
+    }
+    public void ShowFrontTemporary()
+    {
+        isFlipped = true;
+        cardImage.sprite = frontSprite;  //  Show the front image
     }
 }
